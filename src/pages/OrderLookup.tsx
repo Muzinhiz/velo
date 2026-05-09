@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Search, Package, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { Search, Package, CheckCircle, XCircle, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -140,25 +141,30 @@ const OrderLookup = () => {
                   <div>
                     <p className="text-sm text-muted-foreground">Pedido</p>
                     <p className="font-mono font-medium">
-                      {searchedOrder.customer.name}
+                      {searchedOrder.id}
                     </p>
                   </div>
                 </div>
-                <div
-                  
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
+                <Badge
+                  role="status"
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-0 ${
                     searchedOrder.status === 'APROVADO'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-red-100 text-red-700'
+                      ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                      : searchedOrder.status === 'EM_ANALISE'
+                        ? 'bg-amber-100 text-amber-700 hover:bg-amber-100'
+                        : 'bg-red-100 text-red-700 hover:bg-red-100'
                   }`}
                 >
                   {searchedOrder.status === 'APROVADO' ? (
                     <CheckCircle className="w-4 h-4" />
+                  ) : searchedOrder.status === 'EM_ANALISE' ? (
+                    // Classe extra esperada pelo Playwright (`lucide-clock-icon`).
+                    <Clock className="lucide-clock-icon w-4 h-4" />
                   ) : (
                     <XCircle className="w-4 h-4" />
                   )}
                   {searchedOrder.status}
-                </div>
+                </Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -197,7 +203,7 @@ const OrderLookup = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-muted-foreground">Nome</p>
-                    <p className="font-medium">{searchedOrder.id} {searchedOrder.customer.surname}</p>
+                    <p className="font-medium">{searchedOrder.customer.name} {searchedOrder.customer.surname}</p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Email</p>
