@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Search, Package, CheckCircle, XCircle, Loader2, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -59,7 +58,7 @@ const OrderLookup = () => {
     }
     
     if (order) {
-      setSearchedOrder(order);
+      setSearchedOrder(order);      
     } else {
       setNotFound(true);
     }
@@ -86,10 +85,9 @@ const OrderLookup = () => {
               <div>
                 <Label htmlFor="order-id">Número do Pedido</Label>
                 <Input
-                  id="order-id"
-                
                   type="text"
-                  placeholder="Ex: VLO-ABC123"
+                  id="order-id"
+                  placeholder="Ex: VLO-ABCD10"
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
                   className="mt-1"
@@ -145,26 +143,25 @@ const OrderLookup = () => {
                     </p>
                   </div>
                 </div>
-                <Badge
+                <div
                   role="status"
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-0 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
                     searchedOrder.status === 'APROVADO'
-                      ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                      : searchedOrder.status === 'EM_ANALISE'
-                        ? 'bg-amber-100 text-amber-700 hover:bg-amber-100'
-                        : 'bg-red-100 text-red-700 hover:bg-red-100'
+                      ? 'bg-green-100 text-green-700'
+                      : searchedOrder.status === 'REPROVADO'
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-amber-100 text-amber-700'
                   }`}
                 >
                   {searchedOrder.status === 'APROVADO' ? (
                     <CheckCircle className="w-4 h-4" />
-                  ) : searchedOrder.status === 'EM_ANALISE' ? (
-                    // Classe extra esperada pelo Playwright (`lucide-clock-icon`).
-                    <Clock className="lucide-clock-icon w-4 h-4" />
-                  ) : (
+                  ) : searchedOrder.status === 'REPROVADO' ? (
                     <XCircle className="w-4 h-4" />
+                  ) : (
+                    <Clock className="w-4 h-4" />
                   )}
                   {searchedOrder.status}
-                </Badge>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
